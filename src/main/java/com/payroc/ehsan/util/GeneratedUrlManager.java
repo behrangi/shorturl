@@ -13,6 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
+ * I do not like this service but I need time to improve it
  * It is loading pre-generated shorted urls for assignment to long urls by application and bringing them to ram
  * It is using a blocking queue to sync consumers and producers
  * Consumers are ui services thread and producer is urlProducer service 
@@ -47,20 +48,22 @@ public class GeneratedUrlManager{
         @Override
         public void run() {
             while(true) {
-            	 try {
-                    List<GeneratedUrl> results = bulkIdManager.reserveUrlForConsumption(Constants.BULK_SIZE);
-                    LOGGER.debug("Queue ready url BEFORE generation:{} remaining capacity:{}", GENERATED_URL_CACHE.size(), GENERATED_URL_CACHE.remainingCapacity());
-                    for (GeneratedUrl generatedUrl : results) {
-                        GENERATED_URL_CACHE.put(generatedUrl);
-                    }
-                    LOGGER.debug("Queue ready url AFTER generation:{} remaining capacity:{}", GENERATED_URL_CACHE.size(), GENERATED_URL_CACHE.remainingCapacity());
-            	 }catch (Exception exception){
-                     LOGGER.debug("problem in url producer thread", exception);
+        	 try {
+                List<GeneratedUrl> results = bulkIdManager.reserveUrlForConsumption(Constants.BULK_SIZE);
+                LOGGER.debug("Queue ready url BEFORE generation:{} remaining capacity:{}", GENERATED_URL_CACHE.size(), GENERATED_URL_CACHE.remainingCapacity());
+                for (GeneratedUrl generatedUrl : results) {
+                    GENERATED_URL_CACHE.put(generatedUrl);
+                }
+                LOGGER.debug("Queue ready url AFTER generation:{} remaining capacity:{}", GENERATED_URL_CACHE.size(), GENERATED_URL_CACHE.remainingCapacity());
+        	 }catch (Exception exception){
+                 LOGGER.debug("problem in url producer thread", exception);
+                     try {
+                     Thread.sleep(10000);
+                     }catch(Exception ex) {}
                  }
-            }
-            
-        }
-    }
+              }
+         }            
+    }    
 
 }
 

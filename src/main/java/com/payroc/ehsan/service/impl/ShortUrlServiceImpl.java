@@ -27,7 +27,7 @@ public class ShortUrlServiceImpl implements ShortUrlService {
     @Transactional
     public String getShortedUrl(String originalUrlStr, String suggestedUrl) {
     	ShortUrl shortUrl;
-    	if(suggestedUrl!=null && suggestedUrl.length()==7) {
+    	if(suggestedUrl!=null && suggestedUrl.length()==Constants.SHORT_URL_LENGTH) {
             shortUrl=new ShortUrl(originalUrlStr, suggestedUrl);
     	}else {
     		String shortUrlStr = GeneratedUrlManager.getGeneratedUrlForConsumption().getShortUrl();
