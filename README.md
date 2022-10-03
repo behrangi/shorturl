@@ -14,5 +14,8 @@ Then go to the following address and enjoy the app:
 
 http://localhost:8080/
 
+You can speed up the project by increasing blocking queue size and bulk sinze in config
+You can scale easily this app to multiple servers, all locks are managed by jpa
+
 
 
