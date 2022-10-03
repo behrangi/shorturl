@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+	$(document).ready(function(){
+		$('#ermessage').hide();
+		$.ajaxSetup({
+		    error: function(xhr){
+		    	$('#ermessage').text(xhr.status+'  message: '+xhr.statusText );
+				  $('#ermessage').show();
+		    }
+		});
+	  $("button").click(function(){
+		  $('#ermessage').hide();
+		  if($("#surl").val().length>0 && ($("#surl").val().length!==7)){
+			  $('#ermessage').text("Suggested short url length musth be 7 characters!")
+			  $('#ermessage').show();
+			  return;
+		  }
+			  
+		  var myurl;
+		  if($("#surl").val() && $("#surl").val().length===7)
+			  myurl="&sug_url="+ $("#surl").val();
+		  else
+			  myurl="";
+		  $.ajax({
+		        url: "/m/api/v1/short?url="+encodeURIComponent($("#iurl").val())+ myurl ,
+		        		
+		        success: function(result){
+		        	 $('#aurl').attr("href", result)
+				     $('#aurl').text( result)		       	
+		        }
+		        		
+		    });
+//		  .then(function(data) {
+//		       $('#aurl').attr("href", data)
+//		       $('#aurl').text( data)		       
+//		    })
+//	  });
+	});});
+	</script>
+</head>
+<body>
+
+
+<div class="jumbotron text-center">
+  <h1>Short Url Will Bazz The World</h1>
+  <p>Just gave us your url and receive a short free url to tweet!</p> 
+</div>
+<div class="container">
+	<div class="row">
+	    <div class="col-sm-4">
+	    	<p>Enter Long URL Here:</p>
+	    </div>
+	    <div class="col-sm-4">
+			<input type="text" id="iurl" >
+	    </div>
+	     <div class="col-sm-4"></div>    
+    </div>
+    <div class="row">
+    	<div class="col-sm-4">
+	    	<p>Suggested Short Url:</p>
+	    </div>
+    	<div class="col-sm-4">
+	    	<input type="text" id="surl" size=7 >
+	    </div>
+	    <div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+    	<div class="col-sm-4"></div>
+    	<div class="col-sm-4"><button>Click Me!</button></div>
+    	<div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+    	<div class="col-sm-4"><p>Shorted Url:</p></div>
+    	<div class="col-sm-4"><a id="aurl"></a></div>
+    	<div class="col-sm-4"></div>
+    </div>
+    <div class="row">
+    	<div class="col-sm-10">
+	    	<p id="ermessage" style="font-size:14px; color:red; font-weight:bold; ">Error!</p>
+	    </div>
+	    <div class="col-sm-2">
+	    	<p></p>
+	    </div>
+    </div>
+  
+</div>
+
+<!--  
+<p>URL:</p><input type="text" id="iurl" ><br><br>
+<p>Suggested short Url:</p><input type="text" id="surl" size=7 ><br><br>
+<button>Click me</button>
+<p>Result:</p><a id="aurl"></a>
+-->
+
+</body>
+</html>
